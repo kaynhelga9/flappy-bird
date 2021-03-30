@@ -27,6 +27,7 @@ pass_pipe = False
 # Images
 bg = pygame.image.load('./img/bg2.png')
 ground = pygame.image.load('./img/ground.png')
+button_img = pygame.image.load('./img/restart.png')
 
 # Score display
 font = pygame.font.SysFont('Bauhaus 93', 60)
@@ -34,6 +35,16 @@ white = (255, 255, 255)
 def draw_score(text, font, text_color, x, y):
     img = font.render(text, True, text_color)
     screen.blit(img, (x, y))
+
+
+# Reset function
+def reset():
+    pipe_group.empty()
+    flappy.rect.x = 100
+    flappy.rect.y = HEIGHT // 2
+    score = 0
+    return score
+
 
 # Bird
 class Bird(pygame.sprite.Sprite):
@@ -130,12 +141,33 @@ class Pipe(pygame.sprite.Sprite):
             self.kill()
 
 
+class Button():
+    def __init__(self, x, y, image):
+        self.image = image
+        self.rect = self.image.get_rect()
+        self.rect.topleft = (x, y)
+
+    def draw(self):
+        action = False
+
+        mouse_pos = pygame.mouse.get_pos()
+
+        if self.rect.collidepoint(mouse_pos):
+            if pygame.mouse.get_pressed()[0] == 1:
+                action = True
+
+        screen.blit(self.image, (self.rect.x, self.rect.y))
+
+        return action
+
 
 bird_group = pygame.sprite.Group()
 pipe_group = pygame.sprite.Group()
 
 flappy = Bird(100, HEIGHT//2)
 bird_group.add(flappy)
+
+button = Button(WIDTH//2 - 50, HEIGHT //2 - 50, button_img)
 
 
 # Loop
@@ -200,7 +232,14 @@ while run:
         pipe_group.update()
 
 
-    # Events
+    # Check game reset
+    if game_over == True:
+        if button.draw() == True:
+            game_over = False
+            score = reset()
+
+
+    # Events handling
     for event in pygame.event.get():
         
         if event.type == pygame.QUIT:
