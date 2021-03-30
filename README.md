@@ -4,3 +4,5 @@
 1. Pygame
 
 2. Pyinstaller (for building)
+
+![thumb](./img/preview.png)
