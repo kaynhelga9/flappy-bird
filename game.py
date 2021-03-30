@@ -2,7 +2,6 @@ import random
 import pygame
 from pygame.locals import *
 
-
 # Setup
 pygame.init()
 WIDTH = 800
@@ -36,7 +35,6 @@ def draw_score(text, font, text_color, x, y):
     img = font.render(text, True, text_color)
     screen.blit(img, (x, y))
 
-
 # Reset function
 def reset():
     pipe_group.empty()
@@ -45,12 +43,10 @@ def reset():
     score = 0
     return score
 
-
 # Bird
 class Bird(pygame.sprite.Sprite):
     def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
-
         self.images = []
         self.index = 0
         self.counter = 0
@@ -68,7 +64,6 @@ class Bird(pygame.sprite.Sprite):
         self.clicked = False
 
     def update(self):
-
         # Gravity
         if start_fly == True:
             self.vel += 0.3
@@ -94,7 +89,6 @@ class Bird(pygame.sprite.Sprite):
             if pygame.mouse.get_pressed()[0] == 0:
                 self.clicked = False
             
-
             ## Flap anime interval
             self.counter += 1
             cooldown = 10
@@ -120,7 +114,6 @@ class Bird(pygame.sprite.Sprite):
             if self.rect.bottom < 437: 
                 self.rect.y += int(self.vel)
 
-
 class Pipe(pygame.sprite.Sprite):
     def __init__(self, x, y, pos):
         pygame.sprite.Sprite.__init__(self)
@@ -140,7 +133,6 @@ class Pipe(pygame.sprite.Sprite):
         if self.rect.right < 0:
             self.kill()
 
-
 class Button():
     def __init__(self, x, y, image):
         self.image = image
@@ -149,7 +141,6 @@ class Button():
 
     def draw(self):
         action = False
-
         mouse_pos = pygame.mouse.get_pos()
 
         if self.rect.collidepoint(mouse_pos):
@@ -157,9 +148,7 @@ class Button():
                 action = True
 
         screen.blit(self.image, (self.rect.x, self.rect.y))
-
         return action
-
 
 bird_group = pygame.sprite.Group()
 pipe_group = pygame.sprite.Group()
@@ -169,14 +158,10 @@ bird_group.add(flappy)
 
 button = Button(WIDTH//2 - 50, HEIGHT //2 - 50, button_img)
 
-
 # Loop
 run = True
-
 while run:
-    
     clock.tick(fps)
-
     screen.blit(bg, (0,0))
 
     # Draw bird
@@ -231,28 +216,22 @@ while run:
 
         pipe_group.update()
 
-
     # Check game reset
     if game_over == True:
         if button.draw() == True:
             game_over = False
             score = reset()
 
-
     # Events handling
     for event in pygame.event.get():
-        
         if event.type == pygame.QUIT:
             run = False
-        
         if event.type == pygame.MOUSEBUTTONDOWN and start_fly == False and game_over == False:
             start_fly = True
-
 
     # Update screen
     pygame.display.update()
 
-# Close
 pygame.quit()
 
 
