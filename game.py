@@ -42,7 +42,34 @@ class Bird(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = [x, y]
 
+        self.vel = 0
+        self.clicked = False
+
     def update(self):
+
+        # Gravity
+        self.vel += 0.3
+        if self.vel > 8:
+            self.vel = 8
+        if self.rect.bottom < 437: # Lock bird to ground if its
+            self.rect.y += int(self.vel)
+
+        # Jump
+        if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:
+            self.clicked = True
+            self.vel -= 10
+        
+        if self.vel < -8:
+            self.vel = -8
+
+        # Upper wall
+        if self.rect.top < 0:
+            self.rect.y = 0
+
+        if pygame.mouse.get_pressed()[0] == 0:
+            self.clicked = False
+        
+
         ## Flap anime interval
         self.counter += 1
         cooldown = 10
